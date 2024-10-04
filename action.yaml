@@ -25,9 +25,6 @@ runs:
           cicconf --rundir ../ --config config.yaml clone --https
       - name: Run DRC
         shell: bash
-        env:
-          CELL: ${{ inputs.cell }}
-          LIBRARY: ${{ inputs.library }}
         run: |
           export PDK_ROOT=/opt/pdk/share/pdk
           echo "$HOME/.local/bin" >> $GITHUB_PATH
@@ -35,9 +32,8 @@ runs:
           cd work
           export
           make drc CELL=$INPUT_CELL LIB=$INPUT_LIBRARY
-          cat drc/${CELL}_drc.log >> $GITHUB_STEP_SUMMARY
+          cat drc/${INPUT_CELL}_drc.log >> $GITHUB_STEP_SUMMARY
           tail -n 1 drc/${INPUT_CELL}_drc.log| perl -ne '$exit =0;if(!m/:\s+0\n/ig){$exit = 1;}; exit $exit'
-
       - name: Archive DRC
         uses: actions/upload-artifact@v4
         with:
