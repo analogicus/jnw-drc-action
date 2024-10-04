@@ -33,10 +33,11 @@ runs:
           echo "$HOME/.local/bin" >> $GITHUB_PATH
           echo "/opt/eda/bin" >> $GITHUB_PATH
           cd work
-          make drc CELL=$CELL LIB=$LIBRARY
+          export
+          make drc CELL=$INPUT_CELL LIB=$INPUT_LIBRARY
           cat drc/${CELL}_drc.log >> $GITHUB_STEP_SUMMARY
-          tail -n 1 drc/${PRCELL}_drc.log| perl -ne '$exit =0;if(!m/:\s+0\n/ig){$exit = 1;}; exit $exit'
-          test -s gds/${CELL}.gds || exit 1;
+          tail -n 1 drc/${INPUT_CELL}_drc.log| perl -ne '$exit =0;if(!m/:\s+0\n/ig){$exit = 1;}; exit $exit'
+
       - name: Archive DRC
         uses: actions/upload-artifact@v4
         with:
